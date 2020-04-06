@@ -14,3 +14,13 @@ services:
             - 'TZ=Asia/Seoul'
         ports:
             - '33061:3306'
+
+        # redis
+    redis:
+        image: redis:5.0.4-alpine
+        volumes:
+            - '../../data/redis:/data:rw'
+        environment:
+            - 'TZ=Asia/Seoul'
+        ports:
+            - '63791:6379'
