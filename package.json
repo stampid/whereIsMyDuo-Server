@@ -6,7 +6,9 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon --exec babel-node ./src/app.js",
-		"docker:start": "docker-compose -f ./docker/dev.yml up"
+		"docker:start": "docker-compose -f ./docker/dev.yml up",
+		"docker:stop": "docker-compose -f ./docker/dev.yml down",
+		"docker:restart": "npm run docker:stop && npm run docker:start"
 	},
 	"repository": {
 		"type": "git",
@@ -32,6 +34,8 @@
 		"jsonwebtoken": "^8.5.1",
 		"morgan": "^1.10.0",
 		"mysql2": "^2.1.0",
+		"nodemailer": "^6.4.6",
+		"redis": "^3.0.2",
 		"sequelize": "^5.21.5",
 		"socket.io": "^2.3.0"
 	},
