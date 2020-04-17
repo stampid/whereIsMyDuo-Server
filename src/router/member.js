@@ -1,6 +1,7 @@
 import express from 'express';
-import { doAsync } from './decorator';
+import { doAsync, throwError } from './decorator';
 import * as memberServices from '../services/member';
+import * as jwt from '../services/jwt';
 
 const router = express.Router();
 
@@ -41,6 +42,20 @@ router.post(
 		const member = await memberServices.createMemberAccount(memberData, memberAttributeData);
 
 		return res.json(member);
+	}),
+);
+
+router.post(
+	'/login',
+	doAsync(async (req, res) => {
+		const memberData = { user_id: req.body.user_id, password: req.body.password };
+		const member = await memberServices.memberLogin(memberData);
+
+		if (!member) return throwError('Invalid Member', 400);
+
+		const token = await jwt.generateToken({ member_id: member.id });
+
+		return res.json(token);
 	}),
 );
 
