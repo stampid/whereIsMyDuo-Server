@@ -1,7 +1,6 @@
 import express from 'express';
 import { doAsync } from './decorator';
 import * as memberServices from '../services/member';
-import routes from '../routes';
 
 const router = express.Router();
 
@@ -27,7 +26,7 @@ router.post(
 
 /** @description site 회원 가입 */
 router.post(
-	routes.home,
+	'/',
 	doAsync(async (req, res) => {
 		const memberData = {
 			user_id: req.body.user_id,
