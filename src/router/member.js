@@ -19,7 +19,7 @@ router.post(
 router.post(
 	'/email/verify',
 	doAsync(async (req, res) => {
-		const response = await memberServices.authEmail(req.body.email, req.body.secret_word);
+		const response = await memberServices.authEmail(req.body.email, req.body.secretWord);
 
 		return res.json(response);
 	}),
@@ -30,14 +30,14 @@ router.post(
 	'/',
 	doAsync(async (req, res) => {
 		const memberData = {
-			user_id: req.body.user_id,
+			user_id: req.body.userId,
 			password: req.body.password,
 			nickname: req.body.nickname,
 			join_site: 'site',
 		};
 		const memberAttributeData = {
 			email: req.body.email,
-			play_time: req.body.play_time,
+			play_time: req.body.playTime,
 		};
 		const member = await memberServices.createMemberAccount(memberData, memberAttributeData);
 
@@ -48,7 +48,7 @@ router.post(
 router.post(
 	'/login',
 	doAsync(async (req, res) => {
-		const memberData = { user_id: req.body.user_id, password: req.body.password };
+		const memberData = { user_id: req.body.userId, password: req.body.password };
 		const member = await memberServices.memberLogin(memberData);
 
 		if (!member) return throwError('Invalid Member', 400);
