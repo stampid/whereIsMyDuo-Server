@@ -64,3 +64,16 @@ export const createMemberAccount = async (memberDataParam, memberAttributeDataPa
 
 	return response;
 };
+
+export const memberLogin = async (memberData) => {
+	// bcrypt compare;
+	let response = null;
+	const member = await memberComponenet.memberLogin(memberData.user_id);
+
+	if (member) {
+		const verifyPassword = bcrypt.compareSync(memberData.password, member.password);
+		if (verifyPassword) response = member;
+	}
+
+	return response;
+};
