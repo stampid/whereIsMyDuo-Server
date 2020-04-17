@@ -31,9 +31,9 @@ export const sendEmail = async (email, redisClient) => {
  * @param {*} redisClient
  */
 export const authEmail = async (email, secretWord, redisClient) => {
-	const response = { verify: await redisServices.getRedisKeyValue(email, secretWord, redisClient) };
+	const response = await redisServices.getRedisKeyValue(email, secretWord, redisClient);
+	if (response === true) await redisServices.deleteRedisKey(email, redisClient);
 
-	await redisServices.deleteRedisKey(email, redisClient);
 	return response;
 };
 
