@@ -9,7 +9,7 @@ const router = express.Router();
 router.post(
 	'/email',
 	doAsync(async (req, res) => {
-		const response = await memberServices.sendEmail(req.body.email, req.redis_client);
+		const response = await memberServices.sendEmail(req.body.email);
 
 		return res.json(response);
 	}),
@@ -19,7 +19,7 @@ router.post(
 router.post(
 	'/email/verify',
 	doAsync(async (req, res) => {
-		const response = await memberServices.authEmail(req.body.email, req.body.secret_word, req.redis_client);
+		const response = await memberServices.authEmail(req.body.email, req.body.secret_word);
 
 		return res.json(response);
 	}),
