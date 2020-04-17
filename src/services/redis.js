@@ -1,4 +1,10 @@
+import redis from 'redis';
 import { throwError } from '../router/decorator';
+
+const redisClient = redis.createClient({
+	host: process.env.REDIS_HOST,
+	port: process.env.REDIS_PORT,
+});
 
 /**
  * @description redis 정보 저장
@@ -6,8 +12,9 @@ import { throwError } from '../router/decorator';
  * @param {*} value
  * @param {*} redisClient
  */
-export const setRedisKeyValue = async (key, value, redisClient) => {
-	await redisClient.set(key, value);
+export const setRedisKeyValue = async (keyParam, valueParam) => {
+	const value = JSON.stringify(valueParam);
+	await redisClient.set(keyParam, value);
 	return null;
 };
 
@@ -17,11 +24,10 @@ export const setRedisKeyValue = async (key, value, redisClient) => {
  * @param {String} secretWord
  * @param {*} redisClient
  */
-export const getRedisKeyValue = (key, secretWord, redisClient) => {
+export const getRedisKeyValue = (key, secretWord) => {
 	return new Promise((resolve, _) => {
 		redisClient.get(key, (err, value) => {
 			if (err) return throwError(err, 500);
-
 			if (value !== secretWord) return resolve(false);
 
 			return resolve(true);
@@ -34,7 +40,7 @@ export const getRedisKeyValue = (key, secretWord, redisClient) => {
  * @param {String} key
  * @param {*} redisClient
  */
-export const deleteRedisKey = async (key, redisClient) => {
+export const deleteRedisKey = async (key) => {
 	await redisClient.del(key);
 
 	return null;
