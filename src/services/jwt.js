@@ -68,7 +68,7 @@ export const encodeRefreshToken = (payload) => {
  */
 export const generateToken = async (payloadData) => {
 	const uniqueId = uuidv4();
-	const payload = { payloadData, uniqueId };
+	const payload = { member_id: payloadData.member_id, uniqueId };
 	const accessToken = await encodeAccessToken(payload);
 	const refreshToken = await encodeRefreshToken(payload);
 	const decodeToken = await decodeAccessToken(accessToken);
