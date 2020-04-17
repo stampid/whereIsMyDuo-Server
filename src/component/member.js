@@ -19,3 +19,8 @@ export const createMemberAttribute = async (memberAttributeData, t) => {
 	const response = await MemberAttribute.create(memberAttributeData, { transaction: t });
 	return response;
 };
+
+export const memberLogin = async (userId) => {
+	const response = await Member.findOne({ where: { user_id: userId }, attributes: ['id', 'user_id', 'password'] });
+	return response;
+};
