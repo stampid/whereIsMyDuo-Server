@@ -1,6 +1,7 @@
 import express from 'express';
 import { doAsync, throwError } from './decorator';
 import * as memberServices from '../services/member';
+import * as redisServices from '../services/redis';
 import * as jwt from '../services/jwt';
 
 const router = express.Router();
@@ -67,6 +68,17 @@ router.post(
 		const token = await jwt.generateToken({ member_id: member.id });
 
 		return res.json(token);
+	}),
+);
+
+router.post(
+	'/logout',
+	doAsync(async (req, res) => {
+		const accessToken = await jwt.decodeAccessToken(req.headers['x-access-token']);
+
+		await redisServices.deleteRedisKey(accessToken.data.member.member_id);
+
+		return res.json(null);
 	}),
 );
 
