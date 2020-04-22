@@ -42,7 +42,7 @@ export const getRedisValue = (keyParam) => {
 		redisClient.get(key, (err, value) => {
 			if (err) return throwError(err, 500);
 
-			return resolve(value);
+			return resolve(JSON.parse(value));
 		});
 	});
 };
