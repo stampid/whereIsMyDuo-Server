@@ -1,6 +1,16 @@
 import { Member, MemberAttribute } from '../../models/index';
 
 /**
+ * @description 닉네임 존재 여부
+ * @param {String} nickname
+ */
+export const nicknameExist = async (nickname) => {
+	const exist = await Member.count({ where: { nickname } });
+
+	return exist > 0;
+};
+
+/**
  * @description 회원 정보 생성
  * @param {Object} memberData
  * @param {*} t
