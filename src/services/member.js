@@ -7,6 +7,16 @@ import * as redisServices from './redis';
 import { throwError } from '../router/decorator';
 
 /**
+ * @description 닉네임 존재 여부
+ * @param {String} nickname
+ */
+export const nicknameExist = async (nickname) => {
+	const response = await memberComponenet.nicknameExist(nickname);
+
+	return response;
+};
+
+/**
  * @description 이메일 인증 문자 전송
  * @param {String} email
  * @param {*} redisClient
