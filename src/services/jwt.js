@@ -21,6 +21,19 @@ export const decodeAccessToken = (token, refresh = false) => {
 };
 
 /**
+ * @description 리프레쉬 토큰 검증
+ * @param {String} token
+ */
+export const decodeRefreshToken = (token) => {
+	return new Promise((resolve, _) => {
+		jwt.verify(token, process.env.JWT_RE_SECRET, (err, decoded) => {
+			if (err) return throwError('Invalid Token', 400);
+			return resolve(decoded);
+		});
+	});
+};
+
+/**
  * @description 액세스 토큰 생성
  * @param {Object} payload
  */
