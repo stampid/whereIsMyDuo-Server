@@ -14,7 +14,8 @@ const redisClient = redis.createClient({
  */
 export const setRedisKeyValue = async (keyParam, valueParam) => {
 	const value = JSON.stringify(valueParam);
-	await redisClient.set(keyParam, value);
+	const key = JSON.stringify(keyParam);
+	await redisClient.set(key, value);
 	return null;
 };
 
@@ -31,6 +32,17 @@ export const getRedisKeyValue = (key, secretWord) => {
 			if (value !== secretWord) return resolve(false);
 
 			return resolve(true);
+		});
+	});
+};
+
+export const getRedisValue = (keyParam) => {
+	const key = JSON.stringify(keyParam);
+	return new Promise((resolve, _) => {
+		redisClient.get(key, (err, value) => {
+			if (err) return throwError(err, 500);
+
+			return resolve(value);
 		});
 	});
 };
