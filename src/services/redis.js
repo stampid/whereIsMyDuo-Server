@@ -41,6 +41,7 @@ export const getRedisValue = (keyParam) => {
 	return new Promise((resolve, _) => {
 		redisClient.get(key, (err, value) => {
 			if (err) return throwError(err, 500);
+			if (!value) return throwError('Not Match Toekn', 400);
 
 			return resolve(JSON.parse(value));
 		});
