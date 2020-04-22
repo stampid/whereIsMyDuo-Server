@@ -5,6 +5,17 @@ import * as jwt from '../services/jwt';
 
 const router = express.Router();
 
+/** @description 닉네임 중복 확인 */
+router.get(
+	'/nickname/exist',
+	doAsync(async (req, res) => {
+		console.log(req.query);
+		const response = await memberServices.nicknameExist(req.query.nickname);
+
+		return res.json(response);
+	}),
+);
+
 /** @description 인증 이메일 전송 */
 router.post(
 	'/email',
