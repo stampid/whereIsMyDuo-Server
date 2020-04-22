@@ -81,12 +81,12 @@ export const encodeRefreshToken = (payload) => {
  */
 export const generateToken = async (payloadData) => {
 	const uniqueId = uuidv4();
-	const payload = { member_id: payloadData.member_id, uniqueId };
+	const payload = { data: { member: payloadData }, uniqueId };
 	const accessToken = await encodeAccessToken(payload);
 	const refreshToken = await encodeRefreshToken(payload);
 	const decodeToken = await decodeAccessToken(accessToken);
 
-	await redis.setRedisKeyValue(uniqueId, { ac_token: accessToken, re_token: refreshToken });
+	await redis.setRedisKeyValue(payloadData.member_id, { ac_token: accessToken, re_token: refreshToken });
 
 	return { token: { ac_token: accessToken, re_token: refreshToken, decode_token: decodeToken } };
 };
@@ -96,4 +96,21 @@ export const generateToken = async (payloadData) => {
  * @param {String} acToken
  * @param {String} reToken
  */
-export const refreshToken = (acToken, reToken) => {};
+export const refreshToken = async (acToken, reToken) => {
+	const decodeAcToken = await decodeAccessToken(acToken, true);
+	const { data } = decodeAcToken;
+	const redisToken = await redis.getRedisValue(data.member.member_id);
+	let response = null;
+
+	if (acToken === redisToken.ac_token && reToken === redisToken.re_token) {
+		await decodeRefreshToken(redisToken.re_token);
+		const payload = data;
+		const newAccessToken = await encodeAccessToken(payload);
+
+		await redis.setRedisKeyValue(data.member.member_id, { ac_token: newAccessToken, re_token: redisToken.re_token });
+
+		response = newAccessToken;
+	}
+
+	return response;
+};
