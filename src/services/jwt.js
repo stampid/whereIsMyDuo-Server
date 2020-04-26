@@ -27,7 +27,7 @@ export const decodeAccessToken = (token, refresh = false) => {
 export const decodeRefreshToken = (token) => {
 	return new Promise((resolve, _) => {
 		jwt.verify(token, process.env.JWT_RE_SECRET, (err, decoded) => {
-			if (err) return throwError('Invalid Token', 400);
+			if (err) return throwError('Invalid Refresh Token', 400);
 			return resolve(decoded);
 		});
 	});
